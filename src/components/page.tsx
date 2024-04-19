@@ -1,5 +1,5 @@
 export default function Home() {
   return (
-    <h1>E-commerce by FT</h1>
+    <h1>Hi</h1>
   );
 }
