@@ -16,7 +16,7 @@ const addSchema = z.object({
   image: imageSchema.refine(file => file.size > 0, "Missing required image"),
 });
 
-export async function addProduct(formData: FormData) {
+export async function addProduct(prevState: unknown, formData: FormData) {
   const result = addSchema.safeParse(Object.fromEntries(formData.entries()));
 
   if (result.success === false) return result.error.formErrors.fieldErrors;
