@@ -7,12 +7,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatCurrency } from "@/lib/formatters";
 import { useState } from "react";
 import { addProduct } from "../_actions/products";
+import { useFormStatus } from "react-dom";
 
 export function ProductForm() {
   const [priceInCents, setPriceInCents] = useState<number>();
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    await addProduct(formData);
+  }
+
   return (
-    <form action={addProduct} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">Name</Label>
         <Input type="text" id="name" name="name" placeholder="Add product name" required />
@@ -39,10 +46,20 @@ export function ProductForm() {
         <Input type="file" id="file" name="file" required />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="Image">Image</Label>
-        <Input type="file" id="Image" name="Image" required />
+        <Label htmlFor="image">Image</Label>
+        <Input type="file" id="image" name="image" required />
       </div>
-      <Button type="submit">Save</Button>
+      <SubmitButton />
     </form>
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? "Saving..." : "Save"}
+    </Button>
   );
 }
