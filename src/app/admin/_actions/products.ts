@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 import { z } from "zod";
 import fs from "fs/promises";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 const fileSchema = z.instanceof(File, { message: "Missing required item"});
 const imageSchema = fileSchema.refine(file => file.size === 0 || file.type.startsWith("image/"));
@@ -37,7 +37,24 @@ export async function addProduct(prevState: unknown, formData: FormData) {
     description: data.description,
     filePath,
     imagePath,
+    isAvailableForPurchase: false,
   }})
 
   redirect("/admin/products");
+}
+
+export async function toggleProductAvailability(id: string, isAvailableForPurchase: boolean) {
+  await db.product.update({
+    where: { id },
+    data: { isAvailableForPurchase }
+  })
+}
+
+export async function deleteProduct(id: string) {
+  const product = await db.product.delete({ where: { id } });
+
+  if (product == null) return notFound();
+
+  await fs.unlink(product.filePath)
+  await fs.unlink(`public${product.imagePath}`)
 }
