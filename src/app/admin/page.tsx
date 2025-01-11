@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/c
 import { db } from "@/lib/db";
 import { formatCurrency, formatNumber } from "@/lib/formatters";
 
+// Function to get the total sales and the amount of money earned
 async function getSalesData() {
   const data = await db.order.aggregate({
     _sum: { priceInCents: true },
@@ -14,6 +15,7 @@ async function getSalesData() {
   };
 }
 
+// Function to get the total amount of products and the amount of active products
 async function getProductsData() {
   const [totalProducts, activeProducts] = await Promise.all([
     db.product.count(),
@@ -26,6 +28,7 @@ async function getProductsData() {
   };
 }
 
+// Function to get the total amount of customers and the average spending
 async function getCustomersData() {
   const [customerCount, orderData] = await Promise.all([
     db.customer.count(),
@@ -44,6 +47,7 @@ async function getCustomersData() {
 }
 
 export default async function AdminPage() {
+  // Save the information gathered from the functions above
   const [salesData, productsData, customersData] = await Promise.all([
     getSalesData(),
     getProductsData(),

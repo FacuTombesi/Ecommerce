@@ -13,7 +13,7 @@ export function ActiveToggleDropdownItem({
   isAvailableForPurchase: boolean
 }) {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const router = useRouter(); // Set a router to manage realtime updates when a product is activated/deactivated or deleted
 
   return (
     <DropdownMenuItem
@@ -21,7 +21,7 @@ export function ActiveToggleDropdownItem({
       onClick={() => {
         startTransition(async () => {
           await toggleProductAvailability(id, !isAvailableForPurchase)
-          router.refresh()
+          router.refresh() // Refresh router to update state
         })
       }}
     >
@@ -38,7 +38,7 @@ export function DeleteDropdownItem({
   disabled: boolean
 }) {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const router = useRouter(); // Same as above (line 16)
 
   return (
     <DropdownMenuItem
@@ -46,7 +46,7 @@ export function DeleteDropdownItem({
       onClick={() => {
         startTransition(async () => {
           await deleteProduct(id)
-          router.refresh()
+          router.refresh() // Same as above (line 24)
         })
       }}
       className="text-destructive focus:bg-destructive focus:text-destructive-foreground"

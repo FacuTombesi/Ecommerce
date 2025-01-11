@@ -12,8 +12,8 @@ import { Product } from "@prisma/client";
 import Image from "next/image";
 
 export function ProductForm({ product }: { product?: Product | null }) {
-  const [error, action] = useActionState(product == null ? addProduct : updateProduct.bind(null, product.id), {});
-  const [priceInCents, setPriceInCents] = useState<number | undefined>(product?.priceInCents);
+  const [error, action] = useActionState(product == null ? addProduct : updateProduct.bind(null, product.id), {}); // Set the action to addProduct or instead to updateProduct if a product id is passed
+  const [priceInCents, setPriceInCents] = useState<number | undefined>(product?.priceInCents); // Set the state of priceInCents to a number or undefiined, depending if a product is passed or not
 
   return (
     <form action={action} className="space-y-4">
