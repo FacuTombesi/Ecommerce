@@ -27,7 +27,7 @@ export function ProductCard({ id, name, priceInCents, description, imagePath }: 
       </CardContent>
       <CardFooter>
         <Button asChild size="lg" className="w-full">
-          <Link href={`/${id}/buy`}>Buy</Link>
+          <Link href={`/products/${id}/purchase`}>Buy</Link>
         </Button>
       </CardFooter>
     </Card>
