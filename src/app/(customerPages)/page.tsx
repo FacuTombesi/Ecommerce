@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
+// Get the 6 newly created products to rank them by most recent
 function getNewestProducts() {
   return db.product.findMany({
     where: { isAvailableForPurchase : true },
@@ -14,6 +15,7 @@ function getNewestProducts() {
   });
 }
 
+// Get the 6 products with most orders to rank them by most popular
 function getPopularProducts() {
   return db.product.findMany({
     where: { isAvailableForPurchase : true },
@@ -65,6 +67,7 @@ function ProductGridSection({ title, productsFetcher }: ProductsGridSectionProps
   );
 }
 
+// Products suspense creates a promise using productsFetcher to map the products while the site is loading
 async function ProductSuspense({ productsFetcher }: { productsFetcher: () => Promise<Product[]> }) {
   return (
     (await productsFetcher()).map(product => (
