@@ -55,7 +55,7 @@ export default async function AdminPage() {
   ]);
 
   return (
-    <div className="grid grid-col-1 md:grid-col-2 lg:grid-col-3 gap-6">
+    <div className="grid grid-cols-1 gap-6">
       <DashboardCards title="Sales" description={`${formatNumber(salesData.numberOfSales)} orders`} body={formatCurrency(salesData.amount)} />
       <DashboardCards title="Products" description={`${formatNumber(productsData.totalProducts)} total products`} body={`${formatNumber(productsData.activeProducts)} active products`} />
       <DashboardCards title="Customers" description={`${formatNumber(customersData.customerCount)} total customers`} body={`${formatCurrency(customersData.averageSpendingPerCustomer)} average spending per customer`} />
