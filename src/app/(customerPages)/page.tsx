@@ -1,5 +1,6 @@
 import { ProductCard, ProductCardSkeleton } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
+import { cache } from "@/lib/cache";
 import { db } from "@/lib/db";
 import { Product } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
@@ -7,22 +8,30 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 // Get the 6 newly created products to rank them by most recent
-function getNewestProducts() {
-  return db.product.findMany({
-    where: { isAvailableForPurchase : true },
-    orderBy: { createdAt: "desc"} ,
-    take: 6,
-  });
-}
+const getNewestProducts = cache(
+  () => {
+    return db.product.findMany({
+      where: { isAvailableForPurchase : true },
+      orderBy: { createdAt: "desc"} ,
+      take: 6,
+    });
+  },
+  ["/", "getNewestProducts"], // keyParts inside the string[] MUST be unique
+  { revalidate: 60 * 60 * 24 } // 60 seconds * 60 minutes * 24 hours = 1 day... Cache will update every 1 day
+);
 
 // Get the 6 products with most orders to rank them by most popular
-function getPopularProducts() {
-  return db.product.findMany({
-    where: { isAvailableForPurchase : true },
-    orderBy: { orders: { _count: "desc" } },
-    take: 6,
-  });
-}
+const getPopularProducts = cache(
+  () => {
+    return db.product.findMany({
+      where: { isAvailableForPurchase : true },
+      orderBy: { orders: { _count: "desc" } },
+      take: 6,
+    });
+  },
+  ["/", "getPopularProducts"],
+  { revalidate: 60 * 60 * 24 }
+);
 
 export default function HomePage() {
   return (
