@@ -1,14 +1,17 @@
 "use client"
 
+import { emailOrderHistory } from "@/actions/orders";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useFormStatus } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 
 export default function OrdersPage() {
+  const [data, action] = useFormState(emailOrderHistory, {});
+
   return (
-    <form className="max-2-xl mx-auto">
+    <form action={action} className="max-2-xl mx-auto">
       <Card>
         <CardHeader>
           <CardTitle>My orders</CardTitle>
@@ -18,10 +21,11 @@ export default function OrdersPage() {
           <div className="space-y-2 mx-6">
             <Label htmlFor="email">Email</Label>
             <Input type="email" name="email" id="email" placeholder="johndoe@email.com" required />
+            {data.error && <div className="text-destructive">{data.error}</div>}
           </div>
         </CardContent>
         <CardFooter>
-          <SubmitButton />
+          {data.message ? <p className="text-muted-foreground">{data.message}</p> : <SubmitButton />}
         </CardFooter>
       </Card>
     </form>
