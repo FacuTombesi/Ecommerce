@@ -53,7 +53,7 @@ export async function emailOrderHistory(prevState: unknown, formData: FormData):
   })
 
   const data = await resend.emails.send({
-    from: `Suppor <${process.env.SENDER_EMAIL}>`,
+    from: `Support <${process.env.SENDER_EMAIL}>`,
     to: customer.email,
     subject: "Order history",
     react: <OrderHistoryEmail orders={await Promise.all(orders)} />
