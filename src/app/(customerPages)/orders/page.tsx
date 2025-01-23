@@ -19,7 +19,9 @@ export default function OrdersPage() {
           <CardTitle>My orders</CardTitle>
           <CardDescription>Enter your email to receive your purchase history and download links.</CardDescription>
         </CardHeader>
-        <DisclaimerCard content="Disclaimer card content" />
+        <DisclaimerCard
+          content="For the delivery of purchase history via email, the Resend provider has been utilized. This service includes a free plan that permits only one (1) email per domain, making it impossible to send emails to multiple users. Since this is a practice project, I will not be upgrading to a higher-tier plan for a project that is purely experimental. If you would like to see an example of how the email would look, please visit the About section, where you will find screenshots showcasing examples. Thank you!"
+        />
         <CardContent>
           <div className="space-y-2 mx-6">
             <Label htmlFor="email">Email</Label>
