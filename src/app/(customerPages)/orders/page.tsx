@@ -1,14 +1,16 @@
 "use client"
 
 import { emailOrderHistory } from "@/actions/orders";
+import { DisclaimerCard } from "@/components/DisclaimerCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 
 export default function OrdersPage() {
-  const [data, action] = useFormState(emailOrderHistory, {});
+  const [data, action] = useActionState(emailOrderHistory, {});
 
   return (
     <form action={action} className="max-2-xl mx-auto">
@@ -17,6 +19,7 @@ export default function OrdersPage() {
           <CardTitle>My orders</CardTitle>
           <CardDescription>Enter your email to receive your purchase history and download links.</CardDescription>
         </CardHeader>
+        <DisclaimerCard content="Disclaimer card content" />
         <CardContent>
           <div className="space-y-2 mx-6">
             <Label htmlFor="email">Email</Label>
