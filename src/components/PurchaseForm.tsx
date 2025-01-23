@@ -8,6 +8,7 @@ import Image from "next/image";
 import { formatCurrency } from "@/lib/formatters";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { userOrderExists } from "@/app/actions/orders";
+import { DisclaimerCard } from "./DisclaimerCard";
 
 type PurchaseFormProps = {
   product: {
@@ -24,22 +25,27 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as st
 
 export function PurchaseForm({ product, clientSecret }: PurchaseFormProps) {
   return (
-    <div className="grid grid-cols-2 max-w-5xl w-full mx-auto space-y-8">
-      <div className="flex flex-col gap-4 items-center justify-center">
-        <div className="aspect-video flex-shrink-0 w-1/2 relative">
-          <Image src={product.imagePath} fill alt={product.name} className="object-cover" />
-        </div>
-        <div>
-          <div className="text-lg">
-            {formatCurrency(product.priceInCents / 100)}
+    <div className="max-w-5xl w-full mx-auto">
+      <DisclaimerCard
+        content="This version of Stripe is a test environment intended for developers. The required fields can be filled with fictitious data, and the transaction will still be processed as successful—or failed if the email used has already been associated with the purchase of a specific product. Keep in mind that the first digits of the credit card number must correspond to a financial services provider. For example, for a VISA credit card, you may use a number starting with 4242."
+      />
+      <div className="grid grid-cols-2 space-y-8">
+        <div className="flex flex-col gap-4 items-center justify-center">
+          <div className="aspect-video flex-shrink-0 w-1/2 relative">
+            <Image src={product.imagePath} fill alt={product.name} className="object-cover" />
           </div>
-          <h1 className="text-2xl font-bold">{product.name}</h1>
-          <div className="text-sm line-clamp-3 text-muted-foreground">{product.description}</div>
+          <div>
+            <div className="text-lg">
+              {formatCurrency(product.priceInCents / 100)}
+            </div>
+            <h1 className="text-2xl font-bold">{product.name}</h1>
+            <div className="text-sm line-clamp-3 text-muted-foreground">{product.description}</div>
+          </div>
         </div>
+        <Elements options={{ clientSecret }} stripe={stripePromise}>
+          <StripeForm priceInCents={product.priceInCents} productId={product.id} />
+        </Elements>
       </div>
-      <Elements options={{ clientSecret }} stripe={stripePromise}>
-        <StripeForm priceInCents={product.priceInCents} productId={product.id} />
-      </Elements>
     </div>
   );
 }
