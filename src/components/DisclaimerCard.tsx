@@ -7,7 +7,7 @@ export function DisclaimerCard({ content }: { content: string }) {
       <CardContent className="my-0 text-muted-foreground text-sm">
         <div className="flex items-center">
           <CircleAlert />
-          <p>{content}</p>
+          <p className="ml-2">{content}</p>
         </div>
       </CardContent>
     </Card>
