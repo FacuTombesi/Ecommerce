@@ -14,7 +14,7 @@ const getNewestProducts = cache(
     return db.product.findMany({
       where: { isAvailableForPurchase : true },
       orderBy: { createdAt: "desc"} ,
-      take: 6,
+      take: 8,
     });
   },
   ["/", "getNewestProducts"], // keyParts inside the string[] MUST be unique
@@ -27,7 +27,7 @@ const getPopularProducts = cache(
     return db.product.findMany({
       where: { isAvailableForPurchase : true },
       orderBy: { orders: { _count: "desc" } },
-      take: 6,
+      take: 8,
     });
   },
   ["/", "getPopularProducts"],
@@ -63,10 +63,11 @@ function ProductGridSection({ title, productsFetcher }: ProductsGridSectionProps
           </Link>
         </Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
         <Suspense
           fallback={
             <>
+              <ProductCardSkeleton />
               <ProductCardSkeleton />
               <ProductCardSkeleton />
               <ProductCardSkeleton />

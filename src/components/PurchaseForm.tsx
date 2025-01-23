@@ -31,7 +31,7 @@ export function PurchaseForm({ product, clientSecret }: PurchaseFormProps) {
       />
       <div className="grid grid-cols-2 space-y-8">
         <div className="flex flex-col gap-4 items-center justify-center">
-          <div className="aspect-video flex-shrink-0 w-1/2 relative">
+          <div className="aspect-square flex-shrink-0 w-1/2 relative">
             <Image src={product.imagePath} fill alt={product.name} className="object-cover" />
           </div>
           <div>
