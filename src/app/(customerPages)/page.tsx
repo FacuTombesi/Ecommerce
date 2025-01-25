@@ -41,7 +41,7 @@ export default function HomePage() {
       <DisclaimerCard
         content="All products on this website are fictitious, and the images were generated using AI."
       />
-      <ProductGridSection title="Popular" productsFetcher={getPopularProducts} />
+      <ProductGridSection title="Best sellers" productsFetcher={getPopularProducts} />
     </main>
   );
 }
