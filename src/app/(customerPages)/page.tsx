@@ -1,10 +1,12 @@
 import { DisclaimerCard } from "@/components/DisclaimerCard";
 import { ProductCard, ProductCardSkeleton } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { cache } from "@/lib/cache";
 import { db } from "@/lib/db";
 import { Product } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -14,7 +16,7 @@ const getNewestProducts = cache(
     return db.product.findMany({
       where: { isAvailableForPurchase : true },
       orderBy: { createdAt: "desc"} ,
-      take: 8,
+      take: 4,
     });
   },
   ["/", "getNewestProducts"], // keyParts inside the string[] MUST be unique
@@ -37,7 +39,8 @@ const getPopularProducts = cache(
 export default function HomePage() {
   return (
     <main className="space-y-12">
-      <ProductGridSection title="Newest" productsFetcher={getNewestProducts} />
+      <ProductCarouselSection />
+      {/* <ProductGridSection title="Newest" productsFetcher={getNewestProducts} /> */}
       <DisclaimerCard
         content="All products on this website are fictitious, and the images were generated using AI."
       />
@@ -49,6 +52,35 @@ export default function HomePage() {
 type ProductsGridSectionProps = {
   title: string
   productsFetcher: () => Promise<Product[]>
+}
+
+async function ProductCarouselSection() {
+  const products = await getNewestProducts();
+
+  return (
+    <Carousel
+      className="w-full h-[700px]"
+      opts={{
+        align: "start",
+        loop: true,
+      }}
+    >
+      <CarouselContent>
+        {products.map(product => (
+          <CarouselItem key={product.id} className="relative flex flex-col items-center justify-center h-[700px]">
+            <div className="relative w-full h-full">
+              <Image src={product.imagePath} fill objectFit="cover" alt={product.name} />
+              <div className="absolute bottom-0 w-full bg-gradient-to-t from-black to-transparent text-white p-4">
+                <div className="text-center text-2xl font-bold">{product.name}</div>
+              </div>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+  );
 }
 
 function ProductGridSection({ title, productsFetcher }: ProductsGridSectionProps) {
