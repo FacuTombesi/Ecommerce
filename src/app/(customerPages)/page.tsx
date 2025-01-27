@@ -40,7 +40,6 @@ export default function HomePage() {
   return (
     <main className="space-y-12">
       <ProductCarouselSection />
-      {/* <ProductGridSection title="Newest" productsFetcher={getNewestProducts} /> */}
       <DisclaimerCard
         content="All products on this website are fictitious, and the images were generated using AI."
       />
