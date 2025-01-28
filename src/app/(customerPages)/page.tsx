@@ -36,16 +36,34 @@ const getPopularProducts = cache(
   { revalidate: 60 * 60 * 24 }
 );
 
+const getAllProducts = cache(
+  () => {
+    return db.product.findMany({
+      where: { isAvailableForPurchase : true },
+      orderBy: { name: "asc" },
+      take: 12,
+    });
+  },
+  ["/", "getAllProducts"],
+  { revalidate: 60 * 60 * 24 }
+);
+
 export default function HomePage() {
   return (
     <main className="space-y-12">
-      <ProductCarouselSection />
+      <ProductCarouselSection productsFetcher={getNewestProducts} />
       <DisclaimerCard
         content="All products on this website are fictitious, and the images were generated using AI."
       />
       <ProductGridSection title="Best sellers" productsFetcher={getPopularProducts} />
+      <div className="py-8 bg-purple-900"></div>
+      <ProductGridSection title="All games" productsFetcher={getAllProducts} />
     </main>
   );
+}
+
+type ProductsCarouselSectionProps = {
+  productsFetcher: () => Promise<Product[]>
 }
 
 type ProductsGridSectionProps = {
@@ -53,9 +71,7 @@ type ProductsGridSectionProps = {
   productsFetcher: () => Promise<Product[]>
 }
 
-async function ProductCarouselSection() {
-  const products = await getNewestProducts();
-
+async function ProductCarouselSection({ productsFetcher }: ProductsCarouselSectionProps) {
   return (
     <Carousel
       className="w-full h-[700px]"
@@ -65,10 +81,10 @@ async function ProductCarouselSection() {
       }}
     >
       <CarouselContent>
-        {products.map(product => (
+        {(await productsFetcher()).map(product => (
           <CarouselItem key={product.id} className="relative flex flex-col items-center justify-center h-[700px]">
             <div className="relative w-full h-full">
-              <Image src={product.imagePath} fill objectFit="cover" alt={product.name} />
+              <Image src={product.imagePath} fill className="object-cover" alt={product.name} />
               <div className="absolute bottom-0 w-full bg-gradient-to-t from-black to-transparent text-white p-4">
                 <div className="text-center text-2xl font-bold">{product.name}</div>
               </div>
@@ -76,8 +92,8 @@ async function ProductCarouselSection() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="border-none bg-purple-300 hover:bg-purple-200 h-full rounded-lg" />
+      <CarouselNext className="border-none bg-purple-300 hover:bg-purple-200 h-full rounded-lg" />
     </Carousel>
   );
 }
@@ -85,16 +101,10 @@ async function ProductCarouselSection() {
 function ProductGridSection({ title, productsFetcher }: ProductsGridSectionProps) {
   return (
     <div className="space-y-4">
-      <div className="flex gap-4">
-        <h2 className="text-3xl font-bold">{title}</h2>
-        <Button variant="outline" asChild>
-          <Link href="/products" className="space-x-2">
-            <span>View all</span>
-            <ArrowRight className="size-4" />
-          </Link>
-        </Button>
+      <div className="flex gap-4 justify-center border-y-2 border-purple-600 py-2 mb-8">
+        <h2 className="text-2xl uppercase font-semibold">{title}</h2>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
+      <div className={`grid grid-cols-2 md:grid-cols-4 ${(title === "All games") ? 'lg:grid-cols-6' : 'lg:grid-cols-4'} gap-6`}>
         <Suspense
           fallback={
             <>
@@ -108,6 +118,14 @@ function ProductGridSection({ title, productsFetcher }: ProductsGridSectionProps
           <ProductSuspense productsFetcher={productsFetcher} />
         </Suspense>
       </div>
+      {(title === "All games") && (
+        <Button variant="outline" asChild>
+          <Link href="/products" className="space-x-2">
+            <span>View all</span>
+            <ArrowRight className="size-4" />
+          </Link>
+        </Button>
+      )}
     </div>
   );
 }
