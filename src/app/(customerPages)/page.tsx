@@ -50,10 +50,10 @@ const getAllProducts = cache(
 
 export default function HomePage() {
   return (
-    <main className="space-y-12">
+    <main className="space-y-16">
       <ProductCarouselSection productsFetcher={getNewestProducts} />
       <DisclaimerCard
-        content="All products on this website are fictitious, and the images were generated using AI."
+        content="All products and sponsors logos on this website are fictitious and the images were generated using AI."
       />
       <ProductGridSection title="Best sellers" productsFetcher={getPopularProducts} />
       <div className="flex justify-between px-20 py-8">
@@ -108,8 +108,8 @@ async function ProductCarouselSection({ productsFetcher }: ProductsCarouselSecti
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="border-none bg-purple-300 hover:bg-purple-200 h-full rounded-lg" />
-      <CarouselNext className="border-none bg-purple-300 hover:bg-purple-200 h-full rounded-lg" />
+      <CarouselPrevious className="border-none bg-purple-100 hover:bg-purple-50 h-full rounded-lg" />
+      <CarouselNext className="border-none bg-purple-100 hover:bg-purple-50 h-full rounded-lg" />
     </Carousel>
   );
 }
