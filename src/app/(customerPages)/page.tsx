@@ -56,7 +56,23 @@ export default function HomePage() {
         content="All products on this website are fictitious, and the images were generated using AI."
       />
       <ProductGridSection title="Best sellers" productsFetcher={getPopularProducts} />
-      <div className="py-8 bg-purple-900"></div>
+      <div className="flex justify-between px-20 py-8">
+        <div className="relative w-32 h-32 aspect-square">
+          <Image src="/assets/img/Fake_logo_1.png" fill alt="Fake logo 1" />
+        </div>
+        <div className="relative w-32 h-32 aspect-square">
+          <Image src="/assets/img/Fake_logo_2.png" fill alt="Fake logo 2" />
+        </div>
+        <div className="relative w-32 h-32 aspect-square">
+          <Image src="/assets/img/Fake_logo_3.png" fill alt="Fake logo 3" />
+        </div>
+        <div className="relative w-32 h-32 aspect-square">
+          <Image src="/assets/img/Fake_logo_4.png" fill alt="Fake logo 4" />
+        </div>
+        <div className="relative w-32 h-32 aspect-square">
+          <Image src="/assets/img/Fake_logo_5.png" fill alt="Fake logo 5" />
+        </div>
+      </div>
       <ProductGridSection title="All games" productsFetcher={getAllProducts} />
     </main>
   );
